@@ -1,23 +1,18 @@
-#include <opencv2\opencv.hpp> // It's just easier to #include only this
-using namespace cv;
+import numpy as np
+import cv2 as cv
 
-int main() {
+cap = cv.VideoCapture('capture.mp4')
 
-    // Don't use global variables if they are not needed!
-    VideoCapture vid(0); 
-    Mat frame;
-    while(true)  
-    {
-        // Read frame
-        vid.read(frame);
+while(cap.isOpened()):
+    ret, frame = cap.read()
 
-        // Draw rectangle
-        rectangle(frame, Point(100, 100), Point(300, 300), Scalar(255, 0, 0) /*blue*/, 10, 8, 0);
-        // Show image
-        imshow("Webcam", frame);
+    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
-        if ((waitKey(30) & 0xFF) == 27) { // for portability
-            break;
-        }
-    }
-}
+    cv.namedWindow("frame", cv.WND_PROP_FULLSCREEN)
+    cv.setWindowProperty("frame",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
+    cv.imshow('frame',gray)
+    if cv.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv.destroyAllWindows()
